@@ -1,0 +1,14 @@
+# Build artifacts
+main.js
+*.js.map
+
+# Dependencies
+node_modules/
+
+# OS files
+.DS_Store
+
+# Editor
+.idea/
+*.swp
+*.swo
