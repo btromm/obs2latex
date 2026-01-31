@@ -1,90 +1,216 @@
-# Obsidian Sample Plugin
+# obs2latex
 
-This is a sample plugin for Obsidian (https://obsidian.md).
+Convert Obsidian Markdown to LaTeX with proper cross-references, equations, and environments.
 
-This project uses TypeScript to provide type checking and documentation.
-The repo depends on the latest plugin API (obsidian.d.ts) in TypeScript Definition format, which contains TSDoc comments describing what it does.
+## Features
 
-This sample plugin demonstrates some of the basic functionality the plugin API can do.
-- Adds a ribbon icon, which shows a Notice when clicked.
-- Adds a command "Open modal (simple)" which opens a Modal.
-- Adds a plugin setting tab to the settings page.
-- Registers a global click event and output 'click' to the console.
-- Registers a global interval which logs 'setInterval' to the console.
+- **Single file export**: Export individual Markdown notes to LaTeX
+- **Folder export**: Export entire folders as multi-file LaTeX projects with `\input{}` structure
+- **Equation support**: Preserve labeled equations with `\label{}` and convert `[[#^eq-label]]` to `\ref{}`
+- **Callout to environment conversion**: Transform Obsidian callouts into LaTeX theorem environments
+- **Wikilink references**: Convert `[[Note#Section]]` to proper `\ref{}` commands
+- **Embed resolution**: Inline embedded notes during export
+- **Custom preambles**: Use your own LaTeX preamble files
+- **Style configuration**: Configure document class, options, and file ordering via YAML
 
-## First time developing plugins?
+## Requirements
 
-Quick starting guide for new plugin devs:
+- **Obsidian**: Version 1.0.0 or later
+- **Pandoc**: Must be installed and accessible (auto-detected or manually configured)
+  - Install via: `brew install pandoc` (macOS), `apt install pandoc` (Ubuntu), or [download](https://pandoc.org/installing.html)
 
-- Check if [someone already developed a plugin for what you want](https://obsidian.md/plugins)! There might be an existing plugin similar enough that you can partner up with.
-- Make a copy of this repo as a template with the "Use this template" button (login to GitHub if you don't see it).
-- Clone your repo to a local development folder. For convenience, you can place this folder in your `.obsidian/plugins/your-plugin-name` folder.
-- Install NodeJS, then run `npm i` in the command line under your repo folder.
-- Run `npm run dev` to compile your plugin from `main.ts` to `main.js`.
-- Make changes to `main.ts` (or create new `.ts` files). Those changes should be automatically compiled into `main.js`.
-- Reload Obsidian to load the new version of your plugin.
-- Enable plugin in settings window.
-- For updates to the Obsidian API run `npm update` in the command line under your repo folder.
+## Installation
 
-## Releasing new releases
+### From Obsidian Community Plugins
 
-- Update your `manifest.json` with your new version number, such as `1.0.1`, and the minimum Obsidian version required for your latest release.
-- Update your `versions.json` file with `"new-plugin-version": "minimum-obsidian-version"` so older versions of Obsidian can download an older version of your plugin that's compatible.
-- Create new GitHub release using your new version number as the "Tag version". Use the exact version number, don't include a prefix `v`. See here for an example: https://github.com/obsidianmd/obsidian-sample-plugin/releases
-- Upload the files `manifest.json`, `main.js`, `styles.css` as binary attachments. Note: The manifest.json file must be in two places, first the root path of your repository and also in the release.
-- Publish the release.
+1. Open Settings > Community plugins
+2. Search for "obs2latex"
+3. Click Install, then Enable
 
-> You can simplify the version bump process by running `npm version patch`, `npm version minor` or `npm version major` after updating `minAppVersion` manually in `manifest.json`.
-> The command will bump version in `manifest.json` and `package.json`, and add the entry for the new version to `versions.json`
+### Manual Installation
 
-## Adding your plugin to the community plugin list
+1. Download the latest release (`main.js`, `manifest.json`) from Releases
+2. Create folder: `<vault>/.obsidian/plugins/obs2latex/`
+3. Copy files into the folder
+4. Enable the plugin in Settings > Community plugins
 
-- Check the [plugin guidelines](https://docs.obsidian.md/Plugins/Releasing/Plugin+guidelines).
-- Publish an initial version.
-- Make sure you have a `README.md` file in the root of your repo.
-- Make a pull request at https://github.com/obsidianmd/obsidian-releases to add your plugin.
+## Usage
 
-## How to use
+### Export Single Note
 
-- Clone this repo.
-- Make sure your NodeJS is at least v16 (`node --version`).
-- `npm i` or `yarn` to install dependencies.
-- `npm run dev` to start compilation in watch mode.
+1. Open a Markdown note
+2. Use Command Palette (`Cmd/Ctrl+P`) and search "Export current note to LaTeX"
+3. Or right-click the file in the file explorer and select "Export to LaTeX"
 
-## Manually installing the plugin
+### Export Folder
 
-- Copy over `main.js`, `styles.css`, `manifest.json` to your vault `VaultFolder/.obsidian/plugins/your-plugin-id/`.
+1. Right-click a folder in the file explorer
+2. Select "Export folder to LaTeX"
+3. Creates a multi-file project with:
+   - `main.tex` - Document root with `\input{}` statements
+   - `preamble.tex` - Your preamble (if configured)
+   - Individual `.tex` files for each Markdown file
 
-## Improve code quality with eslint
-- [ESLint](https://eslint.org/) is a tool that analyzes your code to quickly find problems. You can run ESLint against your plugin to find common bugs and ways to improve your code. 
-- This project already has eslint preconfigured, you can invoke a check by running`npm run lint`
-- Together with a custom eslint [plugin](https://github.com/obsidianmd/eslint-plugin) for Obsidan specific code guidelines.
-- A GitHub action is preconfigured to automatically lint every commit on all branches.
+## Configuration
 
-## Funding URL
+### Plugin Settings
 
-You can include funding URLs where people who use your plugin can financially support it.
+| Setting | Description | Default |
+|---------|-------------|---------|
+| Export folder | Output directory for LaTeX files | `latex-exports` |
+| Default style file | Path to default `_style.yaml` | (none) |
+| Pandoc path | Custom Pandoc executable path | (auto-detect) |
+| Open after export | Open `.tex` file after export | Off |
 
-The simple way is to set the `fundingUrl` field to your link in your `manifest.json` file:
+### Style Configuration (`_style.yaml`)
 
-```json
-{
-    "fundingUrl": "https://buymeacoffee.com"
-}
+Create a `_style.yaml` file in your folder to configure exports:
+
+```yaml
+# Document class
+documentclass: article
+
+# Class options
+classoptions:
+  - 12pt
+  - a4paper
+
+# Path to preamble file
+preamble: ./preamble.tex
+
+# File order for multi-file export
+order:
+  - introduction
+  - methods
+  - results
+  - conclusion
 ```
 
-If you have multiple URLs, you can also do:
+For folder exports, place `_style.yaml` inside the folder. Otherwise, configure a default style file in settings.
 
-```json
-{
-    "fundingUrl": {
-        "Buy Me a Coffee": "https://buymeacoffee.com",
-        "GitHub Sponsor": "https://github.com/sponsors",
-        "Patreon": "https://www.patreon.com/"
-    }
-}
+### Preamble Files
+
+Create a `preamble.tex` with your custom LaTeX packages and commands:
+
+```latex
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{hyperref}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{definition}{Definition}
 ```
 
-## API Documentation
+## Callout to Environment Mapping
 
-See https://docs.obsidian.md
+Obsidian callouts are converted to LaTeX theorem-style environments:
+
+| Callout Type | LaTeX Environment |
+|--------------|-------------------|
+| `[!theorem]` | `\begin{theorem}` |
+| `[!lemma]` | `\begin{lemma}` |
+| `[!definition]` | `\begin{definition}` |
+| `[!proposition]` | `\begin{proposition}` |
+| `[!corollary]` | `\begin{corollary}` |
+| `[!example]` | `\begin{example}` |
+| `[!remark]` | `\begin{remark}` |
+| `[!proof]` | `\begin{proof}` |
+| `[!note]` | `\begin{note}` |
+| `[!warning]` | `\begin{warning}` |
+
+### Example
+
+Markdown:
+```markdown
+> [!theorem] Pythagorean Theorem
+> For a right triangle with legs $a$, $b$ and hypotenuse $c$:
+> $$a^2 + b^2 = c^2$$
+```
+
+LaTeX output:
+```latex
+\begin{theorem}[Pythagorean Theorem]
+For a right triangle with legs $a$, $b$ and hypotenuse $c$:
+\[a^2 + b^2 = c^2\]
+\end{theorem}
+```
+
+## Cross-References
+
+### Equation References
+
+Label equations with `^eq-label` syntax:
+
+```markdown
+$$
+E = mc^2
+$$ ^eq-einstein
+
+As shown in [[#^eq-einstein]], energy and mass are equivalent.
+```
+
+Output:
+```latex
+\begin{equation}\label{eq:einstein}
+E = mc^2
+\end{equation}
+
+As shown in \ref{eq:einstein}, energy and mass are equivalent.
+```
+
+### Section References
+
+Reference sections in other notes:
+
+```markdown
+See [[Introduction#Background]] for more details.
+```
+
+Output:
+```latex
+See \ref{sec:introduction-background} for more details.
+```
+
+## Frontmatter Overrides
+
+Override style settings per-file using YAML frontmatter:
+
+```markdown
+---
+latex:
+  documentclass: book
+  classoptions:
+    - twoside
+  preamble: ./custom-preamble.tex
+---
+
+# My Document
+```
+
+## Tips
+
+- **Unsupported callouts**: Unknown callout types are passed through as-is with a comment
+- **Missing embeds**: Unresolved embeds generate a LaTeX comment warning
+- **Pandoc required**: This plugin requires Pandoc for Markdown-to-LaTeX conversion
+- **Desktop only**: This plugin uses Node.js APIs and is desktop-only
+
+## Development
+
+```bash
+# Install dependencies
+npm install
+
+# Build plugin
+npm run build
+
+# Run tests
+npm test
+
+# Development mode (watch)
+npm run dev
+```
+
+## License
+
+MIT
