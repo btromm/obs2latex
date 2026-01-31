@@ -14,6 +14,18 @@ describe('replaceReferencePlaceholders', () => {
     expect(result).toBe('From \\eqref{eq-1} and \\eqref{eq-2}.');
   });
 
+  it('handles escaped braces from Pandoc output', () => {
+    const input = 'See \\{\\{EQREF:eq-energy\\}\\} for details.';
+    const result = replaceReferencePlaceholders(input);
+    expect(result).toBe('See \\eqref{eq-energy} for details.');
+  });
+
+  it('handles escaped characters within the label', () => {
+    const input = 'See \\{\\{EQREF:eq\\_energy\\_1\\}\\} for details.';
+    const result = replaceReferencePlaceholders(input);
+    expect(result).toBe('See \\eqref{eq_energy_1} for details.');
+  });
+
   it('handles content without placeholders', () => {
     const input = 'No references here.';
     const result = replaceReferencePlaceholders(input);

@@ -43,4 +43,19 @@ See [[#^eq-energy|Eq 1]].`;
     expect(result.latex).toContain('\\end{document}');
     expect(result.warnings).toEqual([]);
   });
+
+  it('correctly replaces escaped EQREF in the final output', async () => {
+    const { execSync } = await import('child_process');
+    vi.mocked(execSync).mockReturnValueOnce('See \\{\\{EQREF:reward-standard\\}\\} for details.');
+
+    const content = 'See [[#^reward-standard]].';
+    const result = await exportSingleFile(content, {
+      pandocPath: 'pandoc',
+      styleConfig: { documentclass: 'article', classoptions: [] },
+      fileResolver: vi.fn(),
+      preambleLoader: vi.fn().mockResolvedValue(''),
+    });
+
+    expect(result.latex).toContain('See \\eqref{reward-standard} for details.');
+  });
 });
