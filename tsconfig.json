@@ -1,6 +1,7 @@
 {
 	"compilerOptions": {
 		"baseUrl": "src",
+		"types": ["vitest/globals"],
 		"inlineSourceMap": true,
 		"inlineSources": true,
 		"module": "ESNext",
