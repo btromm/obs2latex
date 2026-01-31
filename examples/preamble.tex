@@ -1,0 +1,45 @@
+% obs2latex Default Preamble
+% Common packages for mathematical/academic documents
+
+% Math packages
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+
+% Better typography
+\usepackage{microtype}
+
+% Graphics
+\usepackage{graphicx}
+
+% Hyperlinks (load last for compatibility)
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  urlcolor=blue,
+  citecolor=blue
+}
+
+% Theorem environments (matching obs2latex callout types)
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{exercise}{Exercise}[section]
+
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+% Generic note box for unknown callout types
+\usepackage{tcolorbox}
+\newtcolorbox{notebox}[1][]{
+  colback=gray!5,
+  colframe=gray!50,
+  title=#1,
+  fonttitle=\bfseries
+}

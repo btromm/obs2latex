@@ -1,0 +1,21 @@
+# obs2latex Default Style File
+# Place this file as _style.yaml in any folder, or set as default in plugin settings
+
+# Path to LaTeX preamble file (relative to this file or absolute)
+preamble: ./preamble.tex
+
+# Document class: article, report, book, memoir, etc.
+documentclass: article
+
+# Class options passed to \documentclass
+classoptions:
+  - 12pt
+  - a4paper
+
+# File ordering for multi-file export (filenames without .md extension)
+# Files not listed here will be appended alphabetically after these
+order: []
+  # - introduction
+  # - chapter1
+  # - chapter2
+  # - conclusion
