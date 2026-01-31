@@ -1,7 +1,7 @@
 // src/commands.ts
 import { App, Notice, TFile, TFolder, FileSystemAdapter } from 'obsidian';
 import { findPandoc } from './pandoc';
-import { parseStyleFile, DEFAULT_STYLE } from './config';
+import { DEFAULT_STYLE } from './config';
 import { exportSingleFile } from './exporter/single';
 import { exportFolder } from './exporter/multi';
 import type { Obs2LatexSettings } from './settings';
@@ -36,15 +36,11 @@ export async function exportCurrentNote(app: App, settings: Obs2LatexSettings): 
   try {
     const content = await app.vault.read(activeFile);
 
-    // Load style config
-    let styleConfig = { ...DEFAULT_STYLE };
-    if (settings.defaultStyleFile) {
-      const styleFile = app.vault.getAbstractFileByPath(settings.defaultStyleFile);
-      if (styleFile instanceof TFile) {
-        const styleContent = await app.vault.read(styleFile);
-        styleConfig = parseStyleFile(styleContent);
-      }
-    }
+    // Use default style with preamble path from settings
+    const styleConfig = {
+      ...DEFAULT_STYLE,
+      preamble: settings.defaultPreamble,
+    };
 
     // File resolver for embeds
     const fileResolver = async (path: string): Promise<string | null> => {
@@ -114,10 +110,10 @@ export async function exportFolderToLatex(
   }
 
   try {
-    // Collect markdown files
-    const mdFiles = folder.children.filter(
-      (f): f is TFile => f instanceof TFile && f.extension === 'md'
-    );
+    // Collect markdown files (sorted alphabetically for ordering)
+    const mdFiles = folder.children
+      .filter((f): f is TFile => f instanceof TFile && f.extension === 'md')
+      .sort((a, b) => a.basename.localeCompare(b.basename));
 
     if (mdFiles.length === 0) {
       new Notice('No Markdown files in folder');
@@ -126,21 +122,18 @@ export async function exportFolderToLatex(
 
     new Notice(`Exporting ${mdFiles.length} files...`);
 
-    // Load style config (check for _style.yaml in folder first)
-    let styleConfig = { ...DEFAULT_STYLE };
-    const folderStylePath = `${folder.path}/_style.yaml`;
-    const folderStyleFile = app.vault.getAbstractFileByPath(folderStylePath);
-
-    if (folderStyleFile instanceof TFile) {
-      const styleContent = await app.vault.read(folderStyleFile);
-      styleConfig = parseStyleFile(styleContent);
-    } else if (settings.defaultStyleFile) {
-      const defaultStyleFile = app.vault.getAbstractFileByPath(settings.defaultStyleFile);
-      if (defaultStyleFile instanceof TFile) {
-        const styleContent = await app.vault.read(defaultStyleFile);
-        styleConfig = parseStyleFile(styleContent);
-      }
+    // Check for preamble.tex in folder, otherwise use default
+    let preamblePath = settings.defaultPreamble;
+    const folderPreamblePath = `${folder.path}/preamble.tex`;
+    const folderPreambleFile = app.vault.getAbstractFileByPath(folderPreamblePath);
+    if (folderPreambleFile instanceof TFile) {
+      preamblePath = folderPreamblePath;
     }
+
+    const styleConfig = {
+      ...DEFAULT_STYLE,
+      preamble: preamblePath,
+    };
 
     // Prepare files
     const files = await Promise.all(

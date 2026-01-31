@@ -22,7 +22,6 @@ describe('exportFolder', () => {
         preamble: './preamble.tex',
         documentclass: 'book',
         classoptions: ['12pt'],
-        order: [],
       },
       fileResolver: mockFileResolver,
       preambleLoader: mockPreambleLoader,
@@ -32,14 +31,15 @@ describe('exportFolder', () => {
     expect(result.mainTex).toContain('\\input{intro}');
     expect(result.mainTex).toContain('\\input{chapter1}');
     expect(result.files).toHaveLength(2);
-    expect(result.files[0]?.name).toBe('chapter1');
+    expect(result.files[0]?.name).toBe('intro');
     expect(result.preamble).toBe('\\usepackage{amsmath}');
   });
 
-  it('respects order from style config', async () => {
+  it('preserves file order as provided', async () => {
+    // Files provided in specific order
     const files = [
-      { name: 'chapter1', content: '# Ch1' },
       { name: 'intro', content: '# Intro' },
+      { name: 'chapter1', content: '# Ch1' },
     ];
 
     const result = await exportFolder(files, {
@@ -48,7 +48,6 @@ describe('exportFolder', () => {
         preamble: '',
         documentclass: 'article',
         classoptions: [],
-        order: ['intro', 'chapter1'],
       },
       fileResolver: vi.fn().mockResolvedValue(null),
       preambleLoader: vi.fn().mockResolvedValue(''),

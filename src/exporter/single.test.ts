@@ -34,7 +34,6 @@ See [[#^eq-energy|Eq 1]].`;
         preamble: './preamble.tex',
         documentclass: 'article',
         classoptions: [],
-        order: [],
       },
       fileResolver: mockFileResolver,
       preambleLoader: mockPreambleLoader,

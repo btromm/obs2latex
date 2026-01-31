@@ -29,38 +29,19 @@ export interface MultiExportResult {
 }
 
 /**
- * Sort files according to order config or alphabetically
- */
-function sortFiles(files: FileInput[], order: string[]): FileInput[] {
-  if (order.length === 0) {
-    return [...files].sort((a, b) => a.name.localeCompare(b.name));
-  }
-
-  const orderMap = new Map(order.map((name, idx) => [name, idx]));
-  return [...files].sort((a, b) => {
-    const aOrder = orderMap.get(a.name) ?? Infinity;
-    const bOrder = orderMap.get(b.name) ?? Infinity;
-    if (aOrder === bOrder) {
-      return a.name.localeCompare(b.name);
-    }
-    return aOrder - bOrder;
-  });
-}
-
-/**
  * Export a folder of markdown files to LaTeX
+ * Files are processed in the order provided (caller should sort if needed)
  */
 export async function exportFolder(
   files: FileInput[],
   options: MultiExportOptions
 ): Promise<MultiExportResult> {
   const warnings: string[] = [];
-  const sortedFiles = sortFiles(files, options.styleConfig.order);
 
   // Process each file
   const outputFiles: FileOutput[] = [];
 
-  for (const file of sortedFiles) {
+  for (const file of files) {
     // Preprocess
     const preprocessed = await preprocess(file.content, options.fileResolver);
 
@@ -97,7 +78,7 @@ export async function exportFolder(
   const mainTex = assembleMultiFile(fileNames, {
     documentClass: options.styleConfig.documentclass,
     classOptions: options.styleConfig.classoptions,
-    preamble: preamble ? 'has-preamble' : undefined, // Flag to include \input{preamble}
+    preamble: preamble ? 'has-preamble' : undefined,
   });
 
   return {
