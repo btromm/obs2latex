@@ -51,7 +51,7 @@ See [[#^eq-energy|Eq 1]].`;
     const content = 'See [[#^reward-standard]].';
     const result = await exportSingleFile(content, {
       pandocPath: 'pandoc',
-      styleConfig: { documentclass: 'article', classoptions: [] },
+      styleConfig: { documentclass: 'article', classoptions: [], preamble: '' },
       fileResolver: vi.fn(),
       preambleLoader: vi.fn().mockResolvedValue(''),
     });
