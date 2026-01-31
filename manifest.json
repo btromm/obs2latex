@@ -1,7 +1,7 @@
 {
 	"id": "obs2latex",
 	"name": "obs2latex",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"minAppVersion": "1.0.0",
 	"description": "Convert Obsidian Markdown to LaTeX with proper cross-references, equations, and environments",
 	"author": "btromm",
