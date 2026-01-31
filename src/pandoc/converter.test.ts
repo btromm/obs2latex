@@ -21,6 +21,7 @@ describe('convertToLatex', () => {
     expect(execSync).toHaveBeenCalledWith(
       expect.stringContaining('pandoc'),
       expect.objectContaining({
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         input: expect.any(String),
       })
     );

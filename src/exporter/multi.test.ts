@@ -1,6 +1,6 @@
 // src/exporter/multi.test.ts
 import { describe, it, expect, vi } from 'vitest';
-import { exportFolder, MultiExportResult } from './multi';
+import { exportFolder } from './multi';
 
 vi.mock('child_process', () => ({
   execSync: vi.fn().mockReturnValue('content'),

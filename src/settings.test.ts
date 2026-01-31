@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { DEFAULT_SETTINGS, Obs2LatexSettings } from './settings';
+import { DEFAULT_SETTINGS } from './settings';
 
 describe('Settings', () => {
   it('has correct default values', () => {

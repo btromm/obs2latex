@@ -1,5 +1,6 @@
 // src/pandoc/detector.test.ts
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { Buffer } from 'buffer';
 import { findPandoc, isPandocAvailable } from './detector';
 
 vi.mock('child_process', () => ({

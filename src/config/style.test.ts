@@ -1,6 +1,6 @@
 // src/config/style.test.ts
 import { describe, it, expect } from 'vitest';
-import { parseStyleFile, StyleConfig, DEFAULT_STYLE } from './style';
+import { parseStyleFile, DEFAULT_STYLE } from './style';
 
 describe('parseStyleFile', () => {
   it('parses complete style file', () => {

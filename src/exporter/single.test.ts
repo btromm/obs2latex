@@ -1,6 +1,6 @@
 // src/exporter/single.test.ts
 import { describe, it, expect, vi } from 'vitest';
-import { exportSingleFile, ExportResult } from './single';
+import { exportSingleFile } from './single';
 
 vi.mock('child_process', () => ({
   execSync: vi.fn().mockReturnValue('\\section{Test}'),

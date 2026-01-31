@@ -1,4 +1,6 @@
 // src/test/setup.ts
+import { vi } from 'vitest';
+
 // Mock Obsidian API for unit tests
 export const mockApp = {
   vault: {

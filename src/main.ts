@@ -28,8 +28,8 @@ export default class Obs2LatexPlugin extends Plugin {
               .setTitle('Export to LaTeX')
               .setIcon('file-output')
               .onClick(() => {
-                this.app.workspace.getLeaf().openFile(file).then(() => {
-                  exportCurrentNote(this.app, this.settings);
+                void this.app.workspace.getLeaf().openFile(file).then(() => {
+                  void exportCurrentNote(this.app, this.settings);
                 });
               });
           });
@@ -46,7 +46,7 @@ export default class Obs2LatexPlugin extends Plugin {
   }
 
   async loadSettings() {
-    this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+    this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData()) as Obs2LatexSettings;
   }
 
   async saveSettings() {
