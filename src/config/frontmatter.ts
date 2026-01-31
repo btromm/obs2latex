@@ -11,7 +11,7 @@ export interface FrontmatterResult {
  * Extract YAML frontmatter from markdown content
  */
 export function extractFrontmatter(content: string): FrontmatterResult {
-  const match = content.match(/^---\n([\s\S]*?)\n---\n?([\s\S]*)$/);
+  const match = content.match(/^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n)?([\s\S]*)$/);
 
   if (match) {
     return {

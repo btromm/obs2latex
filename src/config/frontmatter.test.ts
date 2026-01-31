@@ -24,6 +24,13 @@ latex:
     expect(result.frontmatter).toBe('');
     expect(result.body).toBe('# Just content');
   });
+
+  it('handles Windows CRLF line endings', () => {
+    const content = '---\r\ntitle: Test\r\n---\r\n\r\n# Content';
+    const result = extractFrontmatter(content);
+    expect(result.frontmatter).toContain('title: Test');
+    expect(result.body).toContain('# Content');
+  });
 });
 
 describe('parseFrontmatterConfig', () => {
