@@ -1,7 +1,7 @@
 ---
 title: Example Note
-latex:
-  documentclass: article
+documentclass: article
+preamble: ./preamble.tex
 ---
 
 # Introduction

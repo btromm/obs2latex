@@ -28,6 +28,7 @@ export function extractFrontmatter(content: string): FrontmatterResult {
 
 /**
  * Parse latex configuration from frontmatter YAML
+ * Reads documentclass, classoptions, preamble as top-level properties
  */
 export function parseFrontmatterConfig(frontmatter: string): Partial<StyleConfig> {
   if (!frontmatter.trim()) {
@@ -35,8 +36,20 @@ export function parseFrontmatterConfig(frontmatter: string): Partial<StyleConfig
   }
 
   try {
-    const parsed = yaml.load(frontmatter) as { latex?: Partial<StyleConfig> };
-    return parsed.latex || {};
+    const parsed = yaml.load(frontmatter) as Record<string, unknown>;
+    const config: Partial<StyleConfig> = {};
+
+    if (typeof parsed.documentclass === 'string') {
+      config.documentclass = parsed.documentclass;
+    }
+    if (Array.isArray(parsed.classoptions)) {
+      config.classoptions = parsed.classoptions as string[];
+    }
+    if (typeof parsed.preamble === 'string') {
+      config.preamble = parsed.preamble;
+    }
+
+    return config;
   } catch {
     return {};
   }

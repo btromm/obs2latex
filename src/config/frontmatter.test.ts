@@ -6,8 +6,7 @@ describe('extractFrontmatter', () => {
   it('extracts YAML frontmatter', () => {
     const content = `---
 title: My Note
-latex:
-  documentclass: book
+documentclass: book
 ---
 
 # Content here`;
@@ -37,17 +36,31 @@ describe('parseFrontmatterConfig', () => {
   it('extracts latex config from frontmatter', () => {
     const frontmatter = `
 title: My Note
-latex:
-  preamble: ./custom.tex
-  documentclass: report
+preamble: ./custom.tex
+documentclass: report
 `;
     const result = parseFrontmatterConfig(frontmatter);
     expect(result.preamble).toBe('./custom.tex');
     expect(result.documentclass).toBe('report');
   });
 
-  it('returns empty config when no latex section', () => {
-    const frontmatter = `title: Note`;
+  it('extracts classoptions array', () => {
+    const frontmatter = `
+documentclass: book
+classoptions:
+  - 12pt
+  - twoside
+`;
+    const result = parseFrontmatterConfig(frontmatter);
+    expect(result.documentclass).toBe('book');
+    expect(result.classoptions).toEqual(['12pt', 'twoside']);
+  });
+
+  it('ignores unrelated properties', () => {
+    const frontmatter = `
+title: Note
+tags: [math, physics]
+`;
     const result = parseFrontmatterConfig(frontmatter);
     expect(result).toEqual({});
   });

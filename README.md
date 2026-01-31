@@ -71,26 +71,25 @@ For folder exports, place `preamble.tex` inside the folder. Otherwise, set a def
 
 ### Frontmatter Overrides
 
-Override settings per-file using YAML frontmatter with a `latex:` section:
+Override settings per-file using YAML frontmatter:
 
 ```yaml
 ---
-latex:
-  documentclass: book
-  classoptions:
-    - 12pt
-    - twoside
-  preamble: path/to/custom-preamble.tex
+documentclass: book
+classoptions:
+  - 12pt
+  - twoside
+preamble: path/to/custom-preamble.tex
 ---
 ```
 
-| Option | Description | Example |
-|--------|-------------|---------|
+| Property | Description | Example |
+|----------|-------------|---------|
 | `documentclass` | LaTeX document class | `article`, `book`, `report` |
-| `classoptions` | Options passed to documentclass | `[12pt, a4paper, twoside]` |
-| `preamble` | Path to preamble file (overrides default) | `./my-preamble.tex` |
+| `classoptions` | Options passed to documentclass | `[12pt, a4paper]` |
+| `preamble` | Path to preamble file | `./my-preamble.tex` |
 
-Frontmatter settings override the default preamble from plugin settings.
+Frontmatter overrides the default preamble from plugin settings.
 
 ## Callout → Environment Mapping
 

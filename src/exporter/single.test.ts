@@ -9,8 +9,7 @@ vi.mock('child_process', () => ({
 describe('exportSingleFile', () => {
   it('produces complete export result', async () => {
     const content = `---
-latex:
-  documentclass: article
+documentclass: article
 ---
 
 # My Note
