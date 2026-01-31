@@ -16,8 +16,12 @@ export function parseWikilink(wikilink: string): ParsedWikilink {
   const isEmbed = wikilink.startsWith('!');
   const inner = wikilink.replace(/^!?\[\[|\]\]$/g, '');
 
-  const [pathPart, display] = inner.split('|').map(s => s.trim());
-  const [target, anchorPart] = pathPart.split('#');
+  const parts = inner.split('|').map(s => s.trim());
+  const pathPart = parts[0] ?? '';
+  const display = parts[1];
+  const pathParts = pathPart.split('#');
+  const target = pathParts[0] ?? '';
+  const anchorPart = pathParts[1];
   const anchor = anchorPart ? anchorPart.replace(/^\^/, '') : null;
 
   return {

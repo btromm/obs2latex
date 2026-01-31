@@ -24,10 +24,11 @@ export async function resolveAllEmbeds(
   let result = content;
 
   for (const match of matches) {
-    const [fullMatch, reference] = match;
+    const fullMatch = match[0];
+    const reference = match[1] ?? '';
     const [filePath, anchorPart] = reference.split('#^');
 
-    const fileContent = await fileResolver(filePath);
+    const fileContent = await fileResolver(filePath ?? '');
 
     if (fileContent && anchorPart) {
       const blockContent = extractBlockContent(fileContent, anchorPart);

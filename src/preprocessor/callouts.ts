@@ -20,19 +20,19 @@ export function processCallouts(content: string): string {
   let i = 0;
 
   while (i < lines.length) {
-    const line = lines[i];
+    const line = lines[i] ?? '';
     const calloutMatch = line.match(/^>\s*\[!([^\]]+)\]\s*(.*)$/);
 
     if (calloutMatch) {
-      const calloutType = calloutMatch[1].toLowerCase();
-      const title = calloutMatch[2].trim();
+      const calloutType = (calloutMatch[1] ?? '').toLowerCase();
+      const title = (calloutMatch[2] ?? '').trim();
       const envName = CALLOUT_ENV_MAP[calloutType] || FALLBACK_ENV;
 
       const contentLines: string[] = [];
       i++;
 
-      while (i < lines.length && lines[i].startsWith('>')) {
-        const contentLine = lines[i].replace(/^>\s?/, '');
+      while (i < lines.length && (lines[i] ?? '').startsWith('>')) {
+        const contentLine = (lines[i] ?? '').replace(/^>\s?/, '');
         contentLines.push(contentLine);
         i++;
       }

@@ -37,7 +37,7 @@ export function findPandoc(customPath: string): string | null {
 export function getPandocVersion(pandocPath: string): string | null {
   try {
     const output = execSync(`"${pandocPath}" --version`, { stdio: 'pipe' });
-    const firstLine = output.toString().split('\n')[0];
+    const firstLine = output.toString().split('\n')[0] ?? '';
     return firstLine.trim();
   } catch {
     return null;

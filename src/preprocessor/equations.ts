@@ -16,7 +16,7 @@ export function extractEquationLabels(content: string): EquationLabel[] {
   let index = 0;
 
   while ((match = pattern.exec(content)) !== null) {
-    labels.push({ label: match[1], index: index++ });
+    labels.push({ label: match[1] ?? '', index: index++ });
   }
 
   return labels;
@@ -27,7 +27,7 @@ export function extractEquationLabels(content: string): EquationLabel[] {
  */
 function detectInnerEnvironment(mathContent: string): string | null {
   const envMatch = mathContent.match(/\\begin\{(align|aligned|gather|gathered|multline)\}/);
-  return envMatch ? envMatch[1] : null;
+  return envMatch ? (envMatch[1] ?? null) : null;
 }
 
 /**

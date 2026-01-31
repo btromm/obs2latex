@@ -27,8 +27,8 @@ $$
 ^eq-second`;
     const labels = extractEquationLabels(input);
     expect(labels).toHaveLength(2);
-    expect(labels[0].label).toBe('eq-first');
-    expect(labels[1].label).toBe('eq-second');
+    expect(labels[0]?.label).toBe('eq-first');
+    expect(labels[1]?.label).toBe('eq-second');
   });
 });
 
