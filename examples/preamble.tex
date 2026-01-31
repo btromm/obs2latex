@@ -1,6 +1,10 @@
 % obs2latex Default Preamble
 % Common packages for mathematical/academic documents
 
+% Fix for Pandoc's \tightlist
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
 % Math packages
 \usepackage{amsmath}
 \usepackage{amssymb}
